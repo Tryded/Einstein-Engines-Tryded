@@ -40,7 +40,6 @@ namespace Content.Server.Database
                 .Include(p => p.Profiles).ThenInclude(h => h.Jobs)
                 .Include(p => p.Profiles).ThenInclude(h => h.Antags)
                 .Include(p => p.Profiles).ThenInclude(h => h.Traits)
-                .Include(p => p.Profiles).ThenInclude(h => h.Loadouts)
                 .AsSingleQuery()
                 .SingleOrDefaultAsync(p => p.UserId == userId.UserId);
 
@@ -89,7 +88,6 @@ namespace Content.Server.Database
                 .Include(p => p.Jobs)
                 .Include(p => p.Antags)
                 .Include(p => p.Traits)
-                .Include(p => p.Loadouts)
                 .AsSplitQuery()
                 .SingleOrDefault(h => h.Slot == slot);
 
@@ -176,7 +174,6 @@ namespace Content.Server.Database
             var jobs = profile.Jobs.ToDictionary(j => j.JobName, j => (JobPriority) j.Priority);
             var antags = profile.Antags.Select(a => a.AntagName);
             var traits = profile.Traits.Select(t => t.TraitName);
-            var loadouts = profile.Loadouts.Select(t => t.LoadoutName);
 
             var sex = Sex.Male;
             if (Enum.TryParse<Sex>(profile.Sex, true, out var sexVal))
@@ -216,8 +213,6 @@ namespace Content.Server.Database
                 profile.CharacterName,
                 profile.FlavorText,
                 profile.Species,
-                profile.Height,
-                profile.Width,
                 profile.Age,
                 sex,
                 gender,
@@ -237,8 +232,7 @@ namespace Content.Server.Database
                 jobs,
                 (PreferenceUnavailableMode) profile.PreferenceUnavailable,
                 antags.ToList(),
-                traits.ToList(),
-                loadouts.ToList()
+                traits.ToList()
             );
         }
 
@@ -259,8 +253,6 @@ namespace Content.Server.Database
             profile.Age = humanoid.Age;
             profile.Sex = humanoid.Sex.ToString();
             profile.Gender = humanoid.Gender.ToString();
-            profile.Height = humanoid.Height;
-            profile.Width = humanoid.Width;
             profile.HairName = appearance.HairStyleId;
             profile.HairColor = appearance.HairColor.ToHex();
             profile.FacialHairName = appearance.FacialHairStyleId;
@@ -291,12 +283,6 @@ namespace Content.Server.Database
             profile.Traits.AddRange(
                 humanoid.TraitPreferences
                         .Select(t => new Trait {TraitName = t})
-            );
-
-            profile.Loadouts.Clear();
-            profile.Loadouts.AddRange(
-                humanoid.LoadoutPreferences
-                    .Select(t => new Loadout {LoadoutName = t})
             );
 
             return profile;
@@ -710,7 +696,7 @@ namespace Content.Server.Database
             await db.DbContext.SaveChangesAsync(cancel);
         }
 
-        public async Task<int> AddNewRound(Server server, params Guid[] playerIds)
+        public virtual async Task<int> AddNewRound(Server server, params Guid[] playerIds)
         {
             await using var db = await GetDb();
 
@@ -1157,8 +1143,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 entity.Deleted,
                 MakePlayerRecord(entity.DeletedBy),
                 NormalizeDatabaseTime(entity.DeletedAt),
-                entity.Seen,
-                entity.Dismissed);
+                entity.Seen);
         }
 
         public async Task<ServerBanNoteRecord?> GetServerBanAsNoteAsync(int id)
@@ -1383,8 +1368,6 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                     .Include(note => note.Player)
                     .ToListAsync()).Select(MakeAdminNoteRecord));
             notesCol.AddRange(await GetMessagesImpl(db, player));
-            notesCol.AddRange(await GetServerBansAsNotesForUser(db, player));
-            notesCol.AddRange(await GetGroupedServerRoleBansAsNotesForUser(db, player));
             return notesCol;
         }
 
@@ -1437,13 +1420,11 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             return entities.Select(MakeAdminMessageRecord).ToList();
         }
 
-        public async Task MarkMessageAsSeen(int id, bool dismissedToo)
+        public async Task MarkMessageAsSeen(int id)
         {
             await using var db = await GetDb();
             var message = await db.DbContext.AdminMessages.SingleAsync(m => m.Id == id);
             message.Seen = true;
-            if (dismissedToo)
-                message.Dismissed = true;
             await db.DbContext.SaveChangesAsync();
         }
 

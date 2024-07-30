@@ -483,30 +483,17 @@
     - WhitelistChameleon
 
 - type: entity
-  parent: [ClothingHeadBase, BaseFoldable]
+  parent: ClothingHeadBase
   id: ClothingHeadHatUshanka
   name: ushanka
   description: "Perfect for winter in Siberia, da?"
   components:
-  - type: Clothing
-    sprite: Clothing/Head/Hats/ushanka.rsi
-  - type: Appearance
-  - type: AddAccentClothing
-    accent: RussianAccent
-  - type: Foldable
-    canFoldInsideContainer: true
-  - type: FoldableClothing
-    foldedEquippedPrefix: up
-    foldedHeldPrefix: up
   - type: Sprite
     sprite: Clothing/Head/Hats/ushanka.rsi
-    layers:
-    - state: icon
-      map: [ "unfoldedLayer" ]
-    - state: icon-up
-      map: ["foldedLayer"]
-      visible: false
-
+  - type: Clothing
+    sprite: Clothing/Head/Hats/ushanka.rsi
+  - type: AddAccentClothing
+    accent: RussianAccent
 
 - type: entity
   parent: ClothingHeadBase
@@ -822,8 +809,8 @@
 - type: entity
   parent: ClothingHeadBase
   id: ClothingHeadHatMagician
-  name: magician's tophat
-  description: "A magician's tophat."
+  name: magician's top hat.
+  description: "A magician's top hat."
   components:
   - type: Icon
     sprite: Clothing/Head/Hats/magician.rsi
@@ -840,7 +827,6 @@
   - type: Item
     size: Small
     sprite: Clothing/Head/Hats/magician.rsi
-    storedRotation: 0
   - type: Storage
     grid:
     - 0,0,0,0

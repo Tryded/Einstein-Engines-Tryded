@@ -2,5 +2,5 @@
   parent: JobIcon
   id: JobIconMedicalBorg
   icon:
-    sprite: /Textures/DeltaV/Interface/Misc/job_icons.rsi
+    sprite: DeltaV/Interface/Misc/job_icons.rsi
     state: MedicalBorg

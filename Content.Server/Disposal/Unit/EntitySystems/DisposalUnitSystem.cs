@@ -135,7 +135,8 @@ public sealed class DisposalUnitSystem : SharedDisposalUnitSystem
     {
         // This is not an interaction, activation, or alternative verb type because unfortunately most users are
         // unwilling to accept that this is where they belong and don't want to accidentally climb inside.
-        if (!args.CanAccess ||
+        if (!component.MobsCanEnter ||
+            !args.CanAccess ||
             !args.CanInteract ||
             component.Container.ContainedEntities.Contains(args.User) ||
             !_actionBlockerSystem.CanMove(args.User))
@@ -299,12 +300,7 @@ public sealed class DisposalUnitSystem : SharedDisposalUnitSystem
         var canInsert = CanInsert(uid, component, args.Thrown);
         var randDouble = _robustRandom.NextDouble();
 
-        if (!canInsert)
-        {
-            return;
-        }
-
-        if (randDouble > 0.75)
+        if (!canInsert || randDouble > 0.75)
         {
             _audioSystem.PlayPvs(component.MissSound, uid);
 
@@ -635,10 +631,10 @@ public sealed class DisposalUnitSystem : SharedDisposalUnitSystem
         switch (state)
         {
             case DisposalsPressureState.Flushed:
-                _appearance.SetData(uid, SharedDisposalUnitComponent.Visuals.VisualState, SharedDisposalUnitComponent.VisualState.OverlayFlushing, appearance);
+                _appearance.SetData(uid, SharedDisposalUnitComponent.Visuals.VisualState, SharedDisposalUnitComponent.VisualState.Flushing, appearance);
                 break;
             case DisposalsPressureState.Pressurizing:
-                _appearance.SetData(uid, SharedDisposalUnitComponent.Visuals.VisualState, SharedDisposalUnitComponent.VisualState.OverlayCharging, appearance);
+                _appearance.SetData(uid, SharedDisposalUnitComponent.Visuals.VisualState, SharedDisposalUnitComponent.VisualState.Charging, appearance);
                 break;
             case DisposalsPressureState.Ready:
                 _appearance.SetData(uid, SharedDisposalUnitComponent.Visuals.VisualState, SharedDisposalUnitComponent.VisualState.Anchored, appearance);

@@ -4,9 +4,9 @@
   description: job-description-bartender
   playTimeTracker: JobBartender
   requirements:
-    - !type:CharacterDepartmentTimeRequirement
+    - !type:DepartmentTimeRequirement
       department: Civilian
-      min: 3600 #DeltaV
+      time: 3600 #DeltaV
   startingGear: BartenderGear
   icon: "JobIconBartender"
   supervisors: job-supervisors-hop

@@ -1,12 +1,6 @@
-- type: messagePack
+- type: advertisementsPack
   id: PrideDrobeAds
-  messages:
+  advertisements:
   - advertisement-pride-1
   - advertisement-pride-2
   - advertisement-pride-3
-
-- type: messagePack
-  id: PrideDrobeGoodbyes
-  messages:
-  - thankyou-pride-1
-  - thankyou-pride-2

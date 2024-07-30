@@ -1,7 +1,4 @@
-"Changes: Audio":
-  - "**/*.ogg"
- 
-"Changes: C#":
+﻿"Changes: C#":
   - "**/*.cs"
 
 "Changes: Config":

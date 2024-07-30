@@ -1,6 +1,6 @@
 - type: entity
   id: BaseTabletopChemicalMachine
-  parent: [ BaseMachinePowered, SmallConstructibleMachine ]
+  parent: [ BaseMachinePowered, ConstructibleMachine ]
   abstract: true
   components:
   - type: Transform
@@ -29,6 +29,8 @@
           components:
           - FitsInDispenser
   - type: Machine
+  - type: Wires
+    layoutId: chem
   - type: WiresPanel
   - type: WiresVisuals
   - type: ContainerContainer

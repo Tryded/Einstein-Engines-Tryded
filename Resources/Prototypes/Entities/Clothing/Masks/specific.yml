@@ -28,3 +28,4 @@
   suffix: Voice Mask, Chameleon
   components:
     - type: VoiceMasker
+      default: ClothingMaskGas

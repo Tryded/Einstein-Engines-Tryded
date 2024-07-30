@@ -60,7 +60,6 @@
     - type: Sprite
       drawdepth: FloorObjects
       sprite: Structures/Piping/Atmospherics/vent.rsi
-      noRot: true
       layers:
         - sprite: Structures/Piping/Atmospherics/pipe.rsi
           state: pipeHalf
@@ -102,7 +101,6 @@
     - type: Sprite
       drawdepth: FloorObjects
       sprite: Structures/Piping/Atmospherics/vent.rsi
-      noRot: true
       layers:
         - sprite: Structures/Piping/Atmospherics/pipe.rsi
           state: pipeHalf
@@ -153,7 +151,6 @@
     - type: Sprite
       drawdepth: FloorObjects
       sprite: Structures/Piping/Atmospherics/scrubber.rsi
-      noRot: true
       layers:
         - sprite: Structures/Piping/Atmospherics/pipe.rsi
           state: pipeHalf
@@ -209,7 +206,7 @@
       visuals:
        # toggle color of the unshaded light:
        enum.OutletInjectorVisuals.Enabled:
-         enum.LightLayers.Unshaded:
+         unshaded:
            True: { color: "#5eff5e" }
            False: { color: "#990000" }
     - type: Appearance
@@ -248,6 +245,9 @@
       inHandsOnly: false
       key: enum.ThermomachineUiKey.Key
     - type: WiresPanel
+    - type: Wires
+      boardName: wires-board-name-thermomachine
+      layoutId: Thermomachine
     - type: WiresVisuals
     - type: NodeContainer
       nodes:
@@ -307,6 +307,7 @@
   suffix: Enabled
   components:
   - type: GasThermoMachine
+    enabled: true
   - type: ApcPowerReceiver
     powerDisabled: false
 
@@ -351,6 +352,7 @@
   suffix: Enabled
   components:
   - type: GasThermoMachine
+    enabled: true
   - type: ApcPowerReceiver
     powerDisabled: false
 
@@ -385,7 +387,7 @@
     board: HellfireHeaterMachineCircuitBoard
 
 - type: entity
-  parent: [ BaseMachinePowered, SmallConstructibleMachine ]
+  parent: [ BaseMachinePowered, ConstructibleMachine ]
   id: BaseGasCondenser
   name: condenser
   description: Condenses gases into liquids. Now we just need some plumbing.
@@ -428,6 +430,9 @@
   - type: Machine
     board: CondenserMachineCircuitBoard
   - type: WiresPanel
+  - type: Wires
+    boardName: wires-board-name-condenser
+    layoutId: Condenser
   - type: WiresVisuals
   - type: Destructible
     thresholds:

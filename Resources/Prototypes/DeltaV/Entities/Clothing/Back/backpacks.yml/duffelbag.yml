@@ -7,7 +7,7 @@
     contents:
       - id: BoxSurvivalSecurity
       - id: EmergencyRollerBedSpawnFolded
-      - id: BodyBagFolded
+      - id: BodyBag_Folded
       - id: Portafib
     #  - id: Flash
       - id: BruteAutoInjector

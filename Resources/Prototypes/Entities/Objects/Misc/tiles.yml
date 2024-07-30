@@ -1,7 +1,7 @@
 - type: entity
   parent: BaseItem
   id: FloorTileItemBase
-  description: The floor was meant to hold this, not you.
+  description: These could work as a pretty decent throwing weapon.
   abstract: true
   components:
   - type: Sprite
@@ -12,9 +12,7 @@
   - type: DamageOtherOnHit
     damage:
       types:
-        Blunt: 2
-  - type: EmbeddableProjectile
-    sound: /Audio/Weapons/star_hit.ogg
+        Blunt: 5
   - type: Stack
     count: 1
   - type: Damageable
@@ -61,12 +59,6 @@
   - type: Construction
     graph: TileSteel
     node: steeltile
-  - type: DamageOtherOnHit
-    damage:
-      types:
-        Blunt: 5 #Metal floor tiles deal more damage than standard
-  - type: EmbeddableProjectile
-    sound: /Audio/Weapons/block_metal1.ogg
 
 - type: entity
   name: steel dark checker tile
@@ -94,7 +86,7 @@
 
 - type: entity
   name: steel tile
-  parent: FloorTileItemSteel
+  parent: FloorTileItemBase
   id: FloorTileItemMetalDiamond
   components:
   - type: Sprite
@@ -151,7 +143,7 @@
 
 - type: entity
   name: dark tile
-  parent: FloorTileItemSteel
+  parent: FloorTileItemBase
   id: FloorTileItemDark
   components:
   - type: Sprite
@@ -170,7 +162,7 @@
 
 - type: entity
   name: techmaint floor
-  parent: FloorTileItemSteel
+  parent: FloorTileItemBase
   id: FloorTileItemTechmaint
   components:
   - type: Sprite
@@ -186,7 +178,7 @@
 
 - type: entity
   name: reinforced tile
-  parent: FloorTileItemSteel
+  parent: FloorTileItemBase
   id: FloorTileItemReinforced
   components:
   - type: Sprite
@@ -290,7 +282,7 @@
 
 - type: entity
   name: elevator shaft tile
-  parent: FloorTileItemSteel
+  parent: FloorTileItemBase
   id: FloorTileItemElevatorShaft
   components:
   - type: Sprite
@@ -370,7 +362,7 @@
 
 - type: entity
   name: dark mining tile
-  parent: FloorTileItemSteel
+  parent: FloorTileItemBase
   id: FloorTileItemMiningDark
   components:
   - type: Sprite
@@ -386,7 +378,7 @@
 
 - type: entity
   name: light mining tile
-  parent: FloorTileItemSteel
+  parent: FloorTileItemBase
   id: FloorTileItemMiningLight
   components:
   - type: Sprite
@@ -1057,40 +1049,6 @@
     stackType: FloorTileAstroGrass
 
 - type: entity
-  id: FloorTileItemMowedAstroGrass
-  parent: FloorTileItemBase
-  name: mowed astro-grass
-  description: Fake grass that covers up wires and even comes with realistic NanoTrimmings!
-  components:
-  - type: Sprite
-    state: grass
-  - type: Item
-    heldPrefix: grass
-  - type: FloorTile
-    outputs:
-    - Plating
-    - FloorMowedAstroGrass
-  - type: Stack
-    stackType: FloorTileAstroGrass
-
-- type: entity
-  id: FloorTileItemJungleAstroGrass
-  parent: FloorTileItemBase
-  name: jungle astro-grass
-  description: Fake grass that covers up wires and even comes with realistic NanoTrimmings!
-  components:
-  - type: Sprite
-    state: grassjungle
-  - type: Item
-    heldPrefix: grass
-  - type: FloorTile
-    outputs:
-    - Plating
-    - FloorJungleAstroGrass
-  - type: Stack
-    stackType: FloorTileAstroGrass
-
-- type: entity
   id: FloorTileItemAstroIce
   parent: FloorTileItemBase
   name: astro-ice
@@ -1106,23 +1064,6 @@
     - FloorAstroIce
   - type: Stack
     stackType: FloorTileAstroIce
-
-- type: entity
-  id: FloorTileItemAstroSnow
-  parent: FloorTileItemBase
-  name: astro-snow
-  description: Fake snow that's as fluffy as the real thing, while being easily removable!
-  components:
-  - type: Sprite
-    state: snow
-  - type: Item
-    heldPrefix: snow
-  - type: FloorTile
-    outputs:
-    - Plating
-    - FloorAstroSnow
-  - type: Stack
-    stackType: FloorTileAstroSnow
 
 - type: entity
   name: large wood floor

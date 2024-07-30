@@ -3,19 +3,8 @@
   startingInventory:
     PassengerPDA: 5
     ClearPDA: 5
-  # Basic Department PDAs
-    SecurityPDA: 2
-    SecurityCadetPDA: 4
-    MedicalPDA: 2
-    MedicalInternPDA: 4
-    EngineerPDA: 2
-    TechnicalAssistantPDA: 4
-    SciencePDA: 2
-    ResearchAssistantPDA: 4
-    CargoPDA: 2
-    SalvagePDA: 2
-  # HOP's service department
-    ServiceWorkerPDA: 4
+# Begin Delta-V additions
+    ServiceWorkerPDA: 2
     ChefPDA: 2
     BotanistPDA: 2
     BartenderPDA: 2
@@ -28,18 +17,18 @@
     ClownPDA: 1
     MimePDA: 1
     MusicianPDA: 1
+# End Delta-V additions
+    PassengerIDCard: 5
     ClothingHeadsetGrey: 5
-    ClothingHeadsetService: 4
-    ClothingHeadsetCargo: 2
-    ClothingHeadsetEngineering: 2
-    ClothingHeadsetMedical: 2
-    ClothingHeadsetScience: 2
+    ClothingHeadsetService: 5 # Delta-V
     RubberStampApproved: 1
     RubberStampDenied: 1
     Paper: 10
-    EncryptionKeyCargo: 2
-    EncryptionKeyEngineering: 2
-    EncryptionKeyMedical: 2
-    EncryptionKeyScience: 2
-    EncryptionKeySecurity: 2
-    EncryptionKeyService: 4
+# Begin Delta-V subtractions
+  #  EncryptionKeyCargo: 2
+  #  EncryptionKeyEngineering: 2
+  #  EncryptionKeyMedical: 2
+  #  EncryptionKeyScience: 2
+  #  EncryptionKeySecurity: 1
+# End Delta-V subtractions
+    EncryptionKeyService: 3

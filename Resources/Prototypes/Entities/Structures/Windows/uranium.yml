@@ -1,7 +1,7 @@
 - type: entity
   id: UraniumWindow
   name: uranium window
-  parent: WindowRCDResistant
+  parent: Window
   components:
   - type: Sprite
     drawdepth: WallTops
@@ -129,11 +129,6 @@
         - FullTileMask
         layer:
         - GlassLayer
-  - type: Airtight
-    noAirWhenFullyAirBlocked: false
-    airBlockedDirection:
-    - South
-    - East
   - type: DamageVisuals
     damageOverlay:
       sprite: Structures/Windows/cracks_diagonal.rsi

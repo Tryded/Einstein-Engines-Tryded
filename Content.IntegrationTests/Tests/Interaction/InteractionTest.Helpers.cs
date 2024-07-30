@@ -989,7 +989,7 @@ public abstract partial class InteractionTest
     /// </summary>
     protected async Task AddGravity(EntityUid? uid = null)
     {
-        var target = uid ?? MapData.Grid;
+        var target = uid ?? MapData.GridUid;
         await Server.WaitPost(() =>
         {
             var gravity = SEntMan.EnsureComponent<GravityComponent>(target);
@@ -1006,10 +1006,15 @@ public abstract partial class InteractionTest
         await Server.WaitPost(() =>
         {
             var atmosSystem = SEntMan.System<AtmosphereSystem>();
+            var atmos = SEntMan.EnsureComponent<MapAtmosphereComponent>(target);
             var moles = new float[Atmospherics.AdjustedNumberOfGases];
             moles[(int) Gas.Oxygen] = 21.824779f;
             moles[(int) Gas.Nitrogen] = 82.10312f;
-            atmosSystem.SetMapAtmosphere(target, false, new GasMixture(moles, Atmospherics.T20C));
+            atmosSystem.SetMapAtmosphere(target, false, new GasMixture(2500)
+            {
+                Temperature = 293.15f,
+                Moles = moles,
+            }, atmos);
         });
     }
 

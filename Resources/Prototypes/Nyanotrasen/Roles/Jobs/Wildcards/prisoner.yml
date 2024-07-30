@@ -12,7 +12,7 @@
   requirements:
     - !type:DepartmentTimeRequirement
       department: Security
-      min: 21600
+      time: 21600
 
 - type: startingGear
   id: PrisonerGear

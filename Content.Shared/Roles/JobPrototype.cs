@@ -1,5 +1,4 @@
 using Content.Shared.Access;
-using Content.Shared.Customization.Systems;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Roles;
 using Content.Shared.StatusIcon;
@@ -44,7 +43,7 @@ namespace Content.Shared.Roles
         public string? LocalizedDescription => Description is null ? null : Loc.GetString(Description);
 
         [DataField("requirements")]
-        public List<CharacterRequirement>? Requirements;
+        public HashSet<JobRequirement>? Requirements;
 
         [DataField("joinNotifyCrew")]
         public bool JoinNotifyCrew { get; private set; } = false;
@@ -112,17 +111,17 @@ namespace Content.Shared.Roles
         [DataField("special", serverOnly: true)]
         public JobSpecial[] Special { get; private set; } = Array.Empty<JobSpecial>();
 
-        [DataField("access")]
-        public IReadOnlyCollection<ProtoId<AccessLevelPrototype>> Access { get; private set; } = Array.Empty<ProtoId<AccessLevelPrototype>>();
+        [DataField("access", customTypeSerializer: typeof(PrototypeIdListSerializer<AccessLevelPrototype>))]
+        public IReadOnlyCollection<string> Access { get; private set; } = Array.Empty<string>();
 
-        [DataField("accessGroups")]
-        public IReadOnlyCollection<ProtoId<AccessGroupPrototype>> AccessGroups { get; private set; } = Array.Empty<ProtoId<AccessGroupPrototype>>();
+        [DataField("accessGroups", customTypeSerializer: typeof(PrototypeIdListSerializer<AccessGroupPrototype>))]
+        public IReadOnlyCollection<string> AccessGroups { get; private set; } = Array.Empty<string>();
 
-        [DataField("extendedAccess")]
-        public IReadOnlyCollection<ProtoId<AccessLevelPrototype>> ExtendedAccess { get; private set; } = Array.Empty<ProtoId<AccessLevelPrototype>>();
+        [DataField("extendedAccess", customTypeSerializer: typeof(PrototypeIdListSerializer<AccessLevelPrototype>))]
+        public IReadOnlyCollection<string> ExtendedAccess { get; private set; } = Array.Empty<string>();
 
-        [DataField("extendedAccessGroups")]
-        public IReadOnlyCollection<ProtoId<AccessGroupPrototype>> ExtendedAccessGroups { get; private set; } = Array.Empty<ProtoId<AccessGroupPrototype>>();
+        [DataField("extendedAccessGroups", customTypeSerializer: typeof(PrototypeIdListSerializer<AccessGroupPrototype>))]
+        public IReadOnlyCollection<string> ExtendedAccessGroups { get; private set; } = Array.Empty<string>();
     }
 
     /// <summary>

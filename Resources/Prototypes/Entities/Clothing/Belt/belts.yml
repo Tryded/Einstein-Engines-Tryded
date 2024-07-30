@@ -41,7 +41,6 @@
         - Geiger
         - TrayScanner
         - GasAnalyzer
-        - HandLabeler
   - type: ItemMapper
     mapLayers:
       drill:
@@ -224,7 +223,6 @@
         - Plunger
       components:
         - LightReplacer
-        - SmokeOnTrigger
     maxItemSize: Large
   - type: ItemMapper
     mapLayers:
@@ -267,12 +265,10 @@
         - PillCanister
         - Radio
         - DiscreteHealthAnalyzer
-        - SurgeryTool
       components:
         - Hypospray
         - Injector
         - Pill
-        - HandLabeler
   - type: ItemMapper
     mapLayers:
       bottle:
@@ -345,7 +341,6 @@
       components:
         - Seed
         - Smokable
-        - HandLabeler
   - type: ItemMapper
     mapLayers:
       hatchet:
@@ -514,8 +509,6 @@
         name: Sabre
         insertVerbText: sheath-insert-verb
         ejectVerbText: sheath-eject-verb
-        insertSound: /Audio/SimpleStation14/Items/Handling/sword_sheath.ogg
-        ejectSound: /Audio/SimpleStation14/Items/Handling/sword_unsheath.ogg
         whitelist:
           tags:
           - CaptainSabre
@@ -608,20 +601,6 @@
     sprite: Clothing/Belt/securitywebbing.rsi
   - type: Clothing
     sprite: Clothing/Belt/securitywebbing.rsi
-
-- type: entity
-  parent: ClothingBeltSecurityWebbing
-  id: ClothingBeltSecurityWebbingFilled
-  name: security webbing
-  description: Unique and versatile chest rig, can hold security gear.
-  components:
-  - type: StorageFill
-    contents:
-      - id: GrenadeFlashBang
-      - id: TearGasGrenade
-      - id: Stunbaton
-      - id: Handcuffs
-      - id: Handcuffs
 
 - type: entity
   parent: ClothingBeltStorageBase

@@ -28,6 +28,11 @@ public abstract partial class SharedShuttleSystem
 
     public string? GetIFFLabel(EntityUid gridUid, bool self = false, IFFComponent? component = null)
     {
+        if (!IFFComponent.ShowIFFDefault)
+        {
+            return null;
+        }
+
         var entName = MetaData(gridUid).EntityName;
 
         if (self)
@@ -55,7 +60,7 @@ public abstract partial class SharedShuttleSystem
             return;
 
         component.Color = color;
-        Dirty(gridUid, component);
+        Dirty(component);
         UpdateIFFInterfaces(gridUid, component);
     }
 
@@ -68,7 +73,7 @@ public abstract partial class SharedShuttleSystem
             return;
 
         component.Flags |= flags;
-        Dirty(gridUid, component);
+        Dirty(component);
         UpdateIFFInterfaces(gridUid, component);
     }
 
@@ -82,7 +87,7 @@ public abstract partial class SharedShuttleSystem
             return;
 
         component.Flags &= ~flags;
-        Dirty(gridUid, component);
+        Dirty(component);
         UpdateIFFInterfaces(gridUid, component);
     }
 }

@@ -1,64 +1,138 @@
+# Harpy
 - type: emote
-  id: HarpyRing
+  id: HonkHarpy
   category: Vocal
-  chatMessages: [ rings ]
+  chatMessages: [honks.]
   chatTriggers:
-    - rings
+    - honk.
+    - honks.
+    - honks!
+    - honking.
+    - honked.
 
 - type: emote
-  id: HarpyPew
+  id: Ring
   category: Vocal
-  chatMessages: [ pews ]
+  chatMessages: [rings.]
   chatTriggers:
-    - pews
-    - pewpews
+    - ring.
+    - rings.
+    - rings!
+    - ringing.
+    - ringed.
 
 - type: emote
-  id: HarpyBang
+  id: Pew
   category: Vocal
-  chatMessages: [ bangs ]
+  chatMessages: [pews.]
   chatTriggers:
-    - bangs
+    - pew.
+    - pews.
+    - pew!
 
 - type: emote
-  id: HarpyRev
+  id: Bang
   category: Vocal
-  chatMessages: [ revs ]
+  chatMessages: [bangs.]
   chatTriggers:
-    - revs
+    - bangs.
+    - bang.
+    - bang!
+    - banging.
+    - banged.
 
 - type: emote
-  id: HarpyCaw
+  id: Beep
   category: Vocal
-  chatMessages: [ caws ]
+  chatMessages: [beeps.]
   chatTriggers:
-    - caws
+    - beeps.
+    - beep.
+    - beep!
+    - beeping.
+    - beeped.
+
+- type: emote
+  id: Rev
+  category: Vocal
+  chatMessages: [revs.]
+  chatTriggers:
+    - revs.
+    - rev.
+    - rev!
+    - revving
+    - revved
+
+#- type: emote
+#  id: Click
+#  category: Vocal
+#  chatMessages: [clicks.]
+#  chatTriggers:
+#    - clicks.
+#    - click.
+#    - click!
+#    - clicking.
+#    - clicked.
+
+- type: emote
+  id: Caw
+  category: Vocal
+  chatMessages: [caws.]
+  chatTriggers:
+    - caws.
+    - caw.
+    - caw!
+    - cawing
+    - cawed
 
 #Vulpkanin
 - type: emote
   id: Bark
   category: Vocal
-  chatMessages: [ barks ]
+  chatMessages: [barks.]
   chatTriggers:
-    - barks
+    - bark.
+    - bark!
+    - barks.
+    - barks!
+    - barked.
+    - barked!
+    - barking.
 
 - type: emote
   id: Snarl
   category: Vocal
-  chatMessages: [ snarls ]
+  chatMessages: [snarls.]
   chatTriggers:
-    - snarls
+    - snarl.
+    - snarl!
+    - snarls.
+    - snarls!
+    - snarled.
+    - snarled!
+    - snarling.
 
 - type: emote
   id: Whine
   category: Vocal
-  chatMessages: [ whines ]
+  chatMessages: [whines.]
   chatTriggers:
-    - whines
+    - whine.
+    - whine!
+    - whines.
+    - whines!
+    - whined.
+    - whined!
+    - whining.
 
 - type: emote
   id: Howl
   category: Vocal
-  chatMessages: [ howls ]
+  chatMessages: [howls.]
   chatTriggers:
-    - howls
+    - howl.
+    - howl!
+    - howls.
+    - howls!
+    - howling.
+    - howled.

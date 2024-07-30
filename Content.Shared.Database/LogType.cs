@@ -97,6 +97,4 @@ public enum LogType
     /// </summary>
     ChatRateLimited = 87,
     AtmosTemperatureChanged = 88,
-    DeviceNetwork = 89,
-    StoreRefund = 90
 }

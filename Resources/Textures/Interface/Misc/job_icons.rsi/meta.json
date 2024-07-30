@@ -182,9 +182,6 @@
         },
         {
             "name": "Visitor"
-        },
-        {
-            "name": "InitialInfected"
         }
     ]
 }

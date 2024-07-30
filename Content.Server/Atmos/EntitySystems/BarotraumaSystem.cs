@@ -149,8 +149,7 @@ namespace Content.Server.Atmos.EntitySystems
                 return Atmospherics.OneAtmosphere;
             }
 
-            var modified = (environmentPressure + barotrauma.LowPressureModifier) * (barotrauma.LowPressureMultiplier);
-            return Math.Min(modified, Atmospherics.OneAtmosphere);
+            return (environmentPressure + barotrauma.LowPressureModifier) * (barotrauma.LowPressureMultiplier);
         }
 
         /// <summary>
@@ -163,8 +162,7 @@ namespace Content.Server.Atmos.EntitySystems
                 return Atmospherics.OneAtmosphere;
             }
 
-            var modified = (environmentPressure + barotrauma.HighPressureModifier) * (barotrauma.HighPressureMultiplier);
-            return Math.Max(modified, Atmospherics.OneAtmosphere);
+            return (environmentPressure + barotrauma.HighPressureModifier) * (barotrauma.HighPressureMultiplier);
         }
 
         public bool TryGetPressureProtectionValues(

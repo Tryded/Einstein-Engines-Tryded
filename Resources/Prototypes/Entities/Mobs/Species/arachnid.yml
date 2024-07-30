@@ -51,7 +51,7 @@
   - type: MeleeWeapon
     animation: WeaponArcBite
     soundHit:
-      path: /Audio/Effects/bite.ogg
+      collection: AlienClaw
     damage:
       types:
         Piercing: 5

@@ -4,11 +4,12 @@
   noSpawn: true
   components:
   - type: StationEvent
-    startAnnouncement: true
+    startAnnouncement: station-event-xeno-vent-start-announcement
+    startAudio:
+      path: /Audio/Announcements/aliens.ogg
     earliestStart: 20
-    reoccurrenceDelay: 12
     minimumPlayers: 15
-    weight: 6 # Really weak compared to other critters
+    weight: 1
     duration: 60
   - type: VentCrittersRule
     entries:
@@ -29,33 +30,6 @@
     - id: MobXenoQueen
       prob: 0.005
 
-# Weaker version of xenos, meant to provide some dangers in low pop.
-- type: entity
-  id: XenoVentsWeak
-  parent: XenoVents
-  noSpawn: true
-  components:
-  - type: StationEvent
-    startAnnouncement: true
-    reoccurrenceDelay: 12
-    minimumPlayers: 1
-  - type: VentCrittersRule
-    entries:
-    - id: MobXeno
-      prob: 0.006
-    - id: MobXenoDrone
-      prob: 0.004
-    - id: MobXenoSpitter
-      prob: 0.003
-    - id: MobXenoRouny
-      prob: 0.001
-    - id: MobXenoRunner
-      prob: 0.001
-    - id: MobXenoPraetorian
-      prob: 0.001
-    - id: MobXenoRavager
-      prob: 0.001
-
 - type: entity
   id: MothroachSpawn
   parent: BaseGameRule
@@ -64,7 +38,7 @@
   - type: StationEvent
     id: VentCritters
     earliestStart: 15
-    minimumPlayers: 1
+    minimumPlayers: 15
     weight: 4
     duration: 60
   - type: VentCrittersRule
@@ -72,14 +46,15 @@
     - id: MobMothroach
       prob: 0.05
 
-- type: entity
+- type: entity # Delta-V : Midround Syndie Listening Station Spawn
   id: PirateRadioSpawn
   parent: BaseGameRule
   noSpawn: true
   components:
   - type: StationEvent
-    weight: 7.5
-    minimumPlayers: 10
+    earliestStart: 15
+    weight: 5
+    minimumPlayers: 25
     maxOccurrences: 1
     duration: 1
   - type: PirateRadioSpawnRule

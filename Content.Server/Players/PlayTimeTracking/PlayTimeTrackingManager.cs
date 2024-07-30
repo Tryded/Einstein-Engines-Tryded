@@ -55,7 +55,7 @@ public delegate void CalcPlayTimeTrackersCallback(ICommonSession player, HashSet
 /// Operations like refreshing and sending play time info to clients are deferred until the next frame (note: not tick).
 /// </para>
 /// </remarks>
-public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager
+public sealed partial class PlayTimeTrackingManager
 {
     [Dependency] private readonly IServerDbManager _db = default!;
     [Dependency] private readonly IServerNetManager _net = default!;
@@ -209,11 +209,6 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager
         }
     }
 
-    public Dictionary<string, TimeSpan> GetPlayTimes(ICommonSession session)
-    {
-        return GetTrackerTimes(session);
-    }
-
     private void SendPlayTimes(ICommonSession pSession)
     {
         var roles = GetTrackerTimes(pSession);
@@ -321,10 +316,11 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager
         cancel.ThrowIfCancellationRequested();
 
         foreach (var timer in playTimes)
+        {
             data.TrackerTimes.Add(timer.Tracker, timer.TimeSpent);
+        }
 
-        if (session.ContentData() != null)
-            session.ContentData()!.Whitelisted = await _db.GetWhitelistStatusAsync(session.UserId);
+        session.ContentData()!.Whitelisted = await _db.GetWhitelistStatusAsync(session.UserId); // Nyanotrasen - Whitelist
 
         data.Initialized = true;
 

@@ -27,7 +27,7 @@
 - type: entity
   parent: DefaultStationBeaconMedical
   id: DefaultStationBeaconExam
-  suffix: Exam
+  suffix: Exam Room
   components:
   - type: NavMapBeacon
     text: station-beacon-exam
@@ -43,7 +43,7 @@
 - type: entity
   parent: DefaultStationBeaconMedical
   id: DefaultStationBeaconPsychologist
-  suffix: Psych
+  suffix: Psychologist
   components:
   - type: NavMapBeacon
     text: station-beacon-psych
@@ -52,7 +52,7 @@
 - type: entity
   parent: DefaultStationBeaconScience
   id: DefaultStationBeaconProber
-  suffix: Prober
+  suffix: Glimmer Prober
   components:
   - type: NavMapBeacon
     text: station-beacon-glimmer-prober
@@ -60,7 +60,7 @@
 - type: entity
   parent: DefaultStationBeaconScience
   id: DefaultStationBeaconMantis
-  suffix: Mantis
+  suffix: Forensic Mantis
   components:
   - type: NavMapBeacon
     text: station-beacon-forensic-mantis

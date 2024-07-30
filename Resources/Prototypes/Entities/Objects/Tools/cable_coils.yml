@@ -18,8 +18,7 @@
     sprite: Objects/Tools/cable-coils.rsi
   - type: Item
     sprite: Objects/Tools/cable-coils.rsi
-    size: Small
-    storedRotation: -90
+    size: Normal
   - type: CablePlacer
   - type: Clickable
   - type: StaticPrice

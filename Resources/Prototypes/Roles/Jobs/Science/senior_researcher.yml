@@ -5,9 +5,9 @@
   playTimeTracker: JobSeniorResearcher
   setPreference: false # DeltaV - Disable Senior Roles round start selection
   requirements:
-    - !type:CharacterDepartmentTimeRequirement
+    - !type:DepartmentTimeRequirement
       department: Epistemics # DeltaV - Epistemics Department replacing Science
-      min: 216000 #60 hrs
+      time: 216000 #60 hrs
   startingGear: SeniorResearcherGear
   icon: "JobIconSeniorResearcher"
   supervisors: job-supervisors-rd

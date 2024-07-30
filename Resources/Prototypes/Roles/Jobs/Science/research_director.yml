@@ -5,11 +5,11 @@
   playTimeTracker: JobResearchDirector
   antagAdvantage: 6 # DeltaV - Reduced TC: Head of Staff
   requirements:
-    - !type:CharacterDepartmentTimeRequirement
+    - !type:DepartmentTimeRequirement
       department: Epistemics # DeltaV - Epistemics Department replacing Science
-      min: 54000 # DeltaV - 15 hours
-    - !type:CharacterOverallTimeRequirement
-      min: 72000 # DeltaV - 20 hours
+      time: 54000 # DeltaV - 15 hours
+    - !type:OverallPlaytimeRequirement
+      time: 72000 # DeltaV - 20 hours
   weight: 10
   startingGear: ResearchDirectorGear
   icon: "JobIconResearchDirector"
@@ -42,6 +42,8 @@
     jumpsuit: ClothingUniformJumpsuitResearchDirector
     back: ClothingBackpackResearchDirectorFilled
     shoes: ClothingShoesColorBrown
+    head: ClothingHeadHoodMysta # DeltaV - Mystagogue new hat
+    outerClothing: ClothingOuterCoatRndMysta # DeltaV - Mystagogue new coat
     id: RnDPDA
     ears: ClothingHeadsetRD
     belt: BibleMystagogue # Nyanotrasen - Mystagogue book for their Ifrit

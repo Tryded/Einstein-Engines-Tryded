@@ -26,9 +26,6 @@
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: regalrat
-    - map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
-      state: eyes
-      shader: unshaded
   - type: Physics
     bodyType: KinematicController
   - type: Fixtures
@@ -80,7 +77,6 @@
     states:
       Alive:
         Base: regalrat
-        BaseUnshaded: eyes
       Critical:
         Base: critical
       Dead:
@@ -119,14 +115,6 @@
     attributes:
       gender: male
   - type: PotentialPsionic # Nyano
-  - type: LanguageKnowledge
-    speaks:
-    - GalacticCommon
-    - Mouse
-    understands:
-    - GalacticCommon
-    - Mouse
-  - type: CanWalk
 
 - type: entity
   id: MobRatKingBuff
@@ -139,9 +127,6 @@
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: regalrat
-    - map: [ "enum.DamageStateVisualLayers.BaseUnshaded"]
-      state: eyes
-      shader: unshaded
   - type: MobState
   - type: MobThresholds
     thresholds:
@@ -171,8 +156,6 @@
   description: He's da mini rat. He don't make da roolz.
   noSpawn: true #Must be configured to a King or the AI breaks.
   components:
-  - type: Carriable
-    freeHandsRequired: 1
   - type: CombatMode
   - type: MovementSpeedModifier
     baseWalkSpeed : 3.5
@@ -198,21 +181,17 @@
     - SimpleHostile
   - type: Sprite
     drawdepth: SmallMobs
-    sprite: Mobs/Animals/rat.rsi
+    sprite: Mobs/Animals/mouse.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base", "movement"]
-      state: rat
-    - map: [ "enum.DamageStateVisualLayers.BaseUnshaded"]
-      state: eyes
-      shader: unshaded
-
+      state: mouse-3
   - type: SpriteMovement
     movementLayers:
       movement:
-        state: rat-moving
+        state: mouse-moving-3
     noMovementLayers:
       movement:
-        state: rat
+        state: mouse-3
   - type: Physics
     bodyType: KinematicController
   - type: Fixtures
@@ -265,12 +244,11 @@
   - type: DamageStateVisuals
     states:
       Alive:
-        Base: rat
-        BaseUnshaded: eyes
+        Base: mouse-3
       Critical:
-        Base: dead
+        Base: dead-3
       Dead:
-        Base: splat
+        Base: splat-3
   - type: Butcherable
     spawned:
     - id: FoodMeatRat
@@ -299,15 +277,6 @@
   - type: Food
   - type: Item
     size: Tiny # Delta V - Make them eatable and pickable.
-  - type: LanguageKnowledge
-    speaks:
-    - Mouse
-    understands:
-    - GalacticCommon
-    - Mouse
-  - type: FireVisuals
-    sprite: Mobs/Effects/onfire.rsi
-    normalState: Mouse_burning
 
 - type: weightedRandomEntity
   id: RatKingLoot

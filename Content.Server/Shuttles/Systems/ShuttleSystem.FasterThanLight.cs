@@ -12,7 +12,6 @@ using Content.Shared.Parallax;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
 using Content.Shared.StatusEffect;
-using Content.Shared.Timing;
 using Content.Shared.Whitelist;
 using JetBrains.Annotations;
 using Robust.Shared.Audio;
@@ -132,7 +131,7 @@ public sealed partial class ShuttleSystem
         return mapUid;
     }
 
-    public StartEndTime GetStateTime(FTLComponent component)
+    public float GetStateDuration(FTLComponent component)
     {
         var state = component.State;
 
@@ -142,9 +141,9 @@ public sealed partial class ShuttleSystem
             case FTLState.Travelling:
             case FTLState.Arriving:
             case FTLState.Cooldown:
-                return component.StateTime;
+                return component.Accumulator;
             case FTLState.Available:
-                return default;
+                return 0f;
             default:
                 throw new NotImplementedException();
         }
@@ -252,9 +251,7 @@ public sealed partial class ShuttleSystem
 
         hyperspace.StartupTime = startupTime;
         hyperspace.TravelTime = hyperspaceTime;
-        hyperspace.StateTime = StartEndTime.FromStartDuration(
-            _gameTiming.CurTime,
-            TimeSpan.FromSeconds(hyperspace.StartupTime));
+        hyperspace.Accumulator = hyperspace.StartupTime;
         hyperspace.TargetCoordinates = coordinates;
         hyperspace.TargetAngle = angle;
         hyperspace.PriorityTag = priorityTag;
@@ -285,9 +282,7 @@ public sealed partial class ShuttleSystem
         var config = _dockSystem.GetDockingConfig(shuttleUid, target, priorityTag);
         hyperspace.StartupTime = startupTime;
         hyperspace.TravelTime = hyperspaceTime;
-        hyperspace.StateTime = StartEndTime.FromStartDuration(
-            _gameTiming.CurTime,
-            TimeSpan.FromSeconds(hyperspace.StartupTime));
+        hyperspace.Accumulator = hyperspace.StartupTime;
         hyperspace.PriorityTag = priorityTag;
 
         _console.RefreshShuttleConsoles(shuttleUid);
@@ -371,13 +366,13 @@ public sealed partial class ShuttleSystem
         // Reset rotation so they always face the same direction.
         xform.LocalRotation = Angle.Zero;
         _index += width + Buffer;
-        comp.StateTime = StartEndTime.FromCurTime(_gameTiming, comp.TravelTime - DefaultArrivalTime);
+        comp.Accumulator += comp.TravelTime - DefaultArrivalTime;
 
         Enable(uid, component: body);
         _physics.SetLinearVelocity(uid, new Vector2(0f, 20f), body: body);
         _physics.SetAngularVelocity(uid, 0f, body: body);
-        _physics.SetLinearDamping(uid, body, 0f);
-        _physics.SetAngularDamping(uid, body, 0f);
+        _physics.SetLinearDamping(body, 0f);
+        _physics.SetAngularDamping(body, 0f);
 
         _dockSystem.SetDockBolts(uid, true);
         _console.RefreshShuttleConsoles(uid);
@@ -406,7 +401,7 @@ public sealed partial class ShuttleSystem
     {
         var shuttle = entity.Comp2;
         var comp = entity.Comp1;
-        comp.StateTime = StartEndTime.FromCurTime(_gameTiming, DefaultArrivalTime);
+        comp.Accumulator += DefaultArrivalTime;
         comp.State = FTLState.Arriving;
         // TODO: Arrival effects
         // For now we'll just use the ss13 bubbles but we can do fancier.
@@ -431,8 +426,8 @@ public sealed partial class ShuttleSystem
 
         _physics.SetLinearVelocity(uid, Vector2.Zero, body: body);
         _physics.SetAngularVelocity(uid, 0f, body: body);
-        _physics.SetLinearDamping(uid, body, entity.Comp2.LinearDamping);
-        _physics.SetAngularDamping(uid, body, entity.Comp2.AngularDamping);
+        _physics.SetLinearDamping(body, entity.Comp2.LinearDamping);
+        _physics.SetAngularDamping(body, entity.Comp2.AngularDamping);
 
         var target = entity.Comp1.TargetCoordinates;
 
@@ -509,7 +504,7 @@ public sealed partial class ShuttleSystem
         }
 
         comp.State = FTLState.Cooldown;
-        comp.StateTime = StartEndTime.FromCurTime(_gameTiming, FTLCooldown);
+        comp.Accumulator += FTLCooldown;
         _console.RefreshShuttleConsoles(uid);
         _mapManager.SetMapPaused(mapId, false);
         Smimsh(uid, xform: xform);
@@ -524,14 +519,15 @@ public sealed partial class ShuttleSystem
         _console.RefreshShuttleConsoles(entity);
     }
 
-    private void UpdateHyperspace()
+    private void UpdateHyperspace(float frameTime)
     {
-        var curTime = _gameTiming.CurTime;
         var query = EntityQueryEnumerator<FTLComponent, ShuttleComponent>();
 
         while (query.MoveNext(out var uid, out var comp, out var shuttle))
         {
-            if (curTime < comp.StateTime.End)
+            comp.Accumulator -= frameTime;
+
+            if (comp.Accumulator > 0f)
                 continue;
 
             var entity = (uid, comp, shuttle);
@@ -563,7 +559,7 @@ public sealed partial class ShuttleSystem
 
     private float GetSoundRange(EntityUid uid)
     {
-        if (!TryComp<MapGridComponent>(uid, out var grid))
+        if (!_mapManager.TryGetGrid(uid, out var grid))
             return 4f;
 
         return MathF.Max(grid.LocalAABB.Width, grid.LocalAABB.Height) + 12.5f;

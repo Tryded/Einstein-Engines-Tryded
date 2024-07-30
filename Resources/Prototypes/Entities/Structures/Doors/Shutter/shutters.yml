@@ -59,6 +59,7 @@
     - key: enum.WiresUiKey.Key
       type: WiresBoundUserInterface
   - type: Airtight
+    fixVacuum: true
   - type: RadiationBlocker
     resistance: 2
   - type: Damageable
@@ -72,6 +73,9 @@
       behaviors:
       - !type:DoActsBehavior
         acts: ["Destruction"]
+  - type: IconSmooth
+    key: walls
+    mode: NoSprite
   - type: DoorSignalControl
   - type: DeviceNetwork
     deviceNetId: Wireless
@@ -93,7 +97,6 @@
     messagePerceivedByOthers: comp-window-knock
     interactSuccessSound:
       path: /Audio/Effects/glass_knock.ogg
-  - type: BlockWeather
 
 - type: entity
   id: ShuttersNormal

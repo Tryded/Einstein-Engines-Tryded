@@ -30,7 +30,6 @@
         amount: 2
       - id: PlushieArachind
       - id: PlushiePenguin
-      - id: PlushieArachne
 
 - type: entity
   id: CrateFunLizardPlushieBulk
@@ -182,8 +181,6 @@
       - id: MoonBattlemap
       - id: GrassBattlemap
       - id: DiceBag
-        amount: 6
-      - id: PaperCNCSheet
         amount: 6
 
 - type: entity

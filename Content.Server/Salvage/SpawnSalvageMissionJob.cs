@@ -33,9 +33,6 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using Content.Server.Shuttles.Components;
-using Content.Shared.Coordinates;
-using Content.Shared.Shuttles.Components;
 
 namespace Content.Server.Salvage;
 
@@ -49,11 +46,8 @@ public sealed class SpawnSalvageMissionJob : Job<bool>
     private readonly BiomeSystem _biome;
     private readonly DungeonSystem _dungeon;
     private readonly MetaDataSystem _metaData;
-    private readonly SharedTransformSystem _xforms;
-    private readonly SharedMapSystem _map;
 
     public readonly EntityUid Station;
-    public readonly EntityUid? CoordinatesDisk;
     private readonly SalvageMissionParams _missionParams;
 
     private readonly ISawmill _sawmill;
@@ -69,10 +63,7 @@ public sealed class SpawnSalvageMissionJob : Job<bool>
         BiomeSystem biome,
         DungeonSystem dungeon,
         MetaDataSystem metaData,
-        SharedTransformSystem xform,
-        SharedMapSystem map,
         EntityUid station,
-        EntityUid? coordinatesDisk,
         SalvageMissionParams missionParams,
         CancellationToken cancellation = default) : base(maxTime, cancellation)
     {
@@ -84,10 +75,7 @@ public sealed class SpawnSalvageMissionJob : Job<bool>
         _biome = biome;
         _dungeon = dungeon;
         _metaData = metaData;
-        _xforms = xform;
-        _map = map;
         Station = station;
-        CoordinatesDisk = coordinatesDisk;
         _missionParams = missionParams;
         _sawmill = logManager.GetSawmill("salvage_job");
 #if !DEBUG
@@ -98,24 +86,14 @@ public sealed class SpawnSalvageMissionJob : Job<bool>
     protected override async Task<bool> Process()
     {
         _sawmill.Debug("salvage", $"Spawning salvage mission with seed {_missionParams.Seed}");
-        var mapUid = _map.CreateMap(out var mapId, runMapInit: false);
+        var mapId = _mapManager.CreateMap();
+        var mapUid = _mapManager.GetMapEntityId(mapId);
+        _mapManager.AddUninitializedMap(mapId);
         MetaDataComponent? metadata = null;
         var grid = _entManager.EnsureComponent<MapGridComponent>(mapUid);
         var random = new Random(_missionParams.Seed);
         var destComp = _entManager.AddComponent<FTLDestinationComponent>(mapUid);
         destComp.BeaconsOnly = true;
-        destComp.RequireCoordinateDisk = true;
-        destComp.Enabled = true;
-        _metaData.SetEntityName(mapUid, SharedSalvageSystem.GetFTLName(_prototypeManager.Index<DatasetPrototype>("names_borer"), _missionParams.Seed));
-        _entManager.AddComponent<FTLBeaconComponent>(mapUid);
-
-        // Saving the mission mapUid to a CD is made optional, in case one is somehow made in a process without a CD entity
-        if (CoordinatesDisk.HasValue)
-        {
-            var cd = _entManager.EnsureComponent<ShuttleDestinationCoordinatesComponent>(CoordinatesDisk.Value);
-            cd.Destination = mapUid;
-            _entManager.Dirty(CoordinatesDisk.Value, cd);
-        }
 
         // Setup mission configs
         // As we go through the config the rating will deplete so we'll go for most important to least important.
@@ -147,7 +125,11 @@ public sealed class SpawnSalvageMissionJob : Job<bool>
             air.Gases.CopyTo(moles, 0);
             var atmos = _entManager.EnsureComponent<MapAtmosphereComponent>(mapUid);
             _entManager.System<AtmosphereSystem>().SetMapSpace(mapUid, air.Space, atmos);
-            _entManager.System<AtmosphereSystem>().SetMapGasMixture(mapUid, new GasMixture(moles, mission.Temperature), atmos);
+            _entManager.System<AtmosphereSystem>().SetMapGasMixture(mapUid, new GasMixture(2500)
+            {
+                Temperature = mission.Temperature,
+                Moles = moles,
+            }, atmos);
 
             if (mission.Color != null)
             {
@@ -165,6 +147,11 @@ public sealed class SpawnSalvageMissionJob : Job<bool>
         expedition.Station = Station;
         expedition.EndTime = _timing.CurTime + mission.Duration;
         expedition.MissionParams = _missionParams;
+
+        // Don't want consoles to have the incorrect name until refreshed.
+        var ftlUid = _entManager.CreateEntityUninitialized("FTLPoint", new EntityCoordinates(mapUid, grid.TileSizeHalfVector));
+        _metaData.SetEntityName(ftlUid, SharedSalvageSystem.GetFTLName(_prototypeManager.Index<DatasetPrototype>("names_borer"), _missionParams.Seed));
+        _entManager.InitializeAndStartEntity(ftlUid);
 
         var landingPadRadius = 24;
         var minDungeonOffset = landingPadRadius + 4;

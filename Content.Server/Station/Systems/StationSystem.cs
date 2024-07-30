@@ -1,10 +1,9 @@
 using System.Linq;
-using System.Numerics;
 using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
 using Content.Server.Station.Components;
 using Content.Server.Station.Events;
-using Content.Shared.Fax;
+using Content.Shared.CCVar;
 using Content.Shared.Station;
 using JetBrains.Annotations;
 using Robust.Server.GameObjects;
@@ -30,6 +29,7 @@ public sealed class StationSystem : EntitySystem
 {
     [Dependency] private readonly IConfigurationManager _configurationManager = default!;
     [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ChatSystem _chatSystem = default!;
@@ -50,11 +50,16 @@ public sealed class StationSystem : EntitySystem
         _sawmill = _logManager.GetSawmill("station");
 
         SubscribeLocalEvent<GameRunLevelChangedEvent>(OnRoundEnd);
+        SubscribeLocalEvent<PreGameMapLoad>(OnPreGameMapLoad);
         SubscribeLocalEvent<PostGameMapLoad>(OnPostGameMapLoad);
         SubscribeLocalEvent<StationDataComponent, ComponentStartup>(OnStationAdd);
         SubscribeLocalEvent<StationDataComponent, ComponentShutdown>(OnStationDeleted);
         SubscribeLocalEvent<StationMemberComponent, ComponentShutdown>(OnStationGridDeleted);
         SubscribeLocalEvent<StationMemberComponent, PostGridSplitEvent>(OnStationSplitEvent);
+
+        Subs.CVar(_configurationManager, CCVars.StationOffset, x => _randomStationOffset = x, true);
+        Subs.CVar(_configurationManager, CCVars.MaxStationOffset, x => _maxRandomStationOffset = x, true);
+        Subs.CVar(_configurationManager, CCVars.StationRotation, x => _randomStationRotation = x, true);
 
         _player.PlayerStatusChanged += OnPlayerStatusChanged;
     }
@@ -106,6 +111,19 @@ public sealed class StationSystem : EntitySystem
         }
 
         RaiseNetworkEvent(new StationsUpdatedEvent(GetStationNames()), Filter.Broadcast());
+    }
+
+    private void OnPreGameMapLoad(PreGameMapLoad ev)
+    {
+        // this is only for maps loaded during round setup!
+        if (_gameTicker.RunLevel == GameRunLevel.InRound)
+            return;
+
+        if (_randomStationOffset)
+            ev.Options.Offset += _random.NextVector2(_maxRandomStationOffset);
+
+        if (_randomStationRotation)
+            ev.Options.Rotation = _random.NextAngle();
     }
 
     private void OnPostGameMapLoad(PostGameMapLoad ev)
@@ -294,8 +312,6 @@ public sealed class StationSystem : EntitySystem
         // Use overrides for setup.
         var station = EntityManager.SpawnEntity(stationConfig.StationPrototype, MapCoordinates.Nullspace, stationConfig.StationComponentOverrides);
 
-
-
         if (name is not null)
             RenameStation(station, name, false);
 
@@ -304,46 +320,9 @@ public sealed class StationSystem : EntitySystem
         var data = Comp<StationDataComponent>(station);
         name ??= MetaData(station).EntityName;
 
-        var entry = gridIds ?? Array.Empty<EntityUid>();
-
-        foreach (var grid in entry)
+        foreach (var grid in gridIds ?? Array.Empty<EntityUid>())
         {
             AddGridToStation(station, grid, null, data, name);
-        }
-
-        if (TryComp<StationRandomTransformComponent>(station, out var random))
-        {
-            Angle? rotation = null;
-            Vector2? offset = null;
-
-            if (random.MaxStationOffset != null)
-                offset = _random.NextVector2(-random.MaxStationOffset.Value, random.MaxStationOffset.Value);
-
-            if (random.EnableStationRotation)
-                rotation = _random.NextAngle();
-
-            foreach (var grid in entry)
-            {
-                //planetary maps give an error when trying to change from position or rotation.
-                //This is still the case, but it will be irrelevant after the https://github.com/space-wizards/space-station-14/pull/26510
-                if (rotation != null && offset != null)
-                {
-                    var pos = _transform.GetWorldPosition(grid);
-                    _transform.SetWorldPositionRotation(grid, pos + offset.Value, rotation.Value);
-                    continue;
-                }
-                if (rotation != null)
-                {
-                    _transform.SetWorldRotation(grid, rotation.Value);
-                    continue;
-                }
-                if (offset != null)
-                {
-                    var pos = _transform.GetWorldPosition(grid);
-                    _transform.SetWorldPosition(grid, pos + offset.Value);
-                    continue;
-                }
-            }
         }
 
         var ev = new StationPostInitEvent((station, data));
@@ -477,7 +456,7 @@ public sealed class StationSystem : EntitySystem
 
         if (xform.GridUid == EntityUid.Invalid)
         {
-            Log.Debug("Unable to get owning station - GridUid invalid.");
+            Log.Debug("A");
             return null;
         }
 

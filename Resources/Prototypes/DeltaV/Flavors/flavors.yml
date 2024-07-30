@@ -87,9 +87,9 @@
 
 #Delta V
 - type: flavor
-  id: healthcodeviolation
+  id: dulleavene
   flavorType: Complex
-  description: flavor-complex-healthcodeviolation
+  description: flavor-complex-dulleavene
 
 - type: flavor
   id: gunmetal

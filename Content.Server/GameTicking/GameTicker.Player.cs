@@ -1,13 +1,10 @@
 using Content.Server.Database;
-using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Content.Shared.GameWindow;
 using Content.Shared.Players;
 using Content.Shared.Preferences;
 using JetBrains.Annotations;
 using Robust.Server.Player;
-using Robust.Shared.Audio;
-using Robust.Shared.Audio.Systems;
 using Robust.Shared.Enums;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
@@ -20,7 +17,6 @@ namespace Content.Server.GameTicking
     {
         [Dependency] private readonly IPlayerManager _playerManager = default!;
         [Dependency] private readonly IServerDbManager _dbManager = default!;
-        [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
 
         private void InitializePlayer()
         {
@@ -59,6 +55,10 @@ namespace Content.Server.GameTicking
                         session.Data.ContentDataUncast = data;
                     }
 
+                    // Make the player actually join the game.
+                    // timer time must be > tick length
+                    Timer.Spawn(0, () => _playerManager.JoinGame(args.Session));
+
                     var record = await _dbManager.GetPlayerRecordByUserId(args.Session.UserId);
                     var firstConnection = record != null &&
                                           Math.Abs((record.FirstSeenTime - record.LastSeenTime).TotalMinutes) < 1;
@@ -68,11 +68,6 @@ namespace Content.Server.GameTicking
                         : Loc.GetString("player-join-message", ("name", args.Session.Name)));
 
                     RaiseNetworkEvent(GetConnectionStatusMsg(), session.Channel);
-
-                    if (firstConnection && _configurationManager.GetCVar(CCVars.AdminNewPlayerJoinSound))
-                        _audioSystem.PlayGlobal(new SoundPathSpecifier("/Audio/Effects/newplayerping.ogg"),
-                            Filter.Empty().AddPlayers(_adminManager.ActiveAdmins), false,
-                            audioParams: new AudioParams { Volume = -5f });
 
                     if (LobbyEnabled && _roundStartCountdownHasNotStartedYetDueToNoPlayers)
                     {
@@ -132,8 +127,7 @@ namespace Content.Server.GameTicking
                         mind.Session = null;
                     }
 
-                    if (_playerGameStatuses.ContainsKey(session.UserId))
-                        _userDb.ClientDisconnected(session);
+                    _userDb.ClientDisconnected(session);
                     break;
                 }
             }
