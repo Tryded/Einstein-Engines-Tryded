@@ -6,10 +6,10 @@
   requirements:
     - !type:DepartmentTimeRequirement
       department: Medical
-      time: 21600 # 6 hrs
+      min: 21600 # 6 hrs
     - !type:DepartmentTimeRequirement
       department: Security
-      time: 18000 # 4 hrs
+      min: 18000 # 4 hrs
   startingGear: CorpsmanGear
   icon: "JobIconBrigmedic"
   supervisors: job-supervisors-hos
@@ -20,6 +20,7 @@
   #- Brig #Delta V: Removed brig access
   - Maintenance
   - External
+  - Corpsman
   extendedAccess:
   - Chemistry
   special:
